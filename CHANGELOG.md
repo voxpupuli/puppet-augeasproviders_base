@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.2
+
+- Upped supported Puppet versions to include Puppet 5
+
 ## 2.0.1
 
 - Fix metadata.json
