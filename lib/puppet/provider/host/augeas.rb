@@ -69,11 +69,11 @@ Puppet::Type.type(:host).provide(:augeas, :parent => Puppet::Type.type(:augeaspr
     resources
   end
 
-  def exists? 
+  def exists?
     @property_hash[:ensure] == :present && @property_hash[:target] == target
   end
 
-  def create 
+  def create
     augopen! do |aug|
       aug.defnode('resource', "$target/#{next_seq(aug.match('$target/*'))}", nil)
       aug.set('$resource/ipaddr', resource[:ip])
@@ -98,7 +98,7 @@ Puppet::Type.type(:host).provide(:augeas, :parent => Puppet::Type.type(:augeaspr
       :name => resource.name,
       :target => resource[:target],
       :ip => resource[:ip],
-      :host_aliases => resource[:host_aliases], 
+      :host_aliases => resource[:host_aliases],
     }
     if Puppet::Type.type(:host).validattr? :comment and resource[:comment]
       @property_hash[:comment] = resource[:comment] || ""

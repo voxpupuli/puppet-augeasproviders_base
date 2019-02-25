@@ -254,16 +254,14 @@ describe provider_class do
     let(:target) { tmptarget.path }
 
     it "should fail to load" do
-      txn = apply(Puppet::Type.type(:host).new(
-        :name     => "foo",
-        :ip       => "192.168.1.1",
-        :target   => target,
-        :provider => "augeas"
-      ))
-
-      txn.any_failed?.should_not == nil
-      @logs.first.level.should == :err
-      @logs.first.message.include?(target).should == true
+      expect {
+        apply(Puppet::Type.type(:host).new(
+          :name     => "foo",
+          :ip       => "192.168.1.1",
+          :target   => target,
+          :provider => "augeas"
+        ))
+      }.to raise_error(RuntimeError, /Augeas didn't load/)
     end
   end
 
