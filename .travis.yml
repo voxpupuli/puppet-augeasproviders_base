@@ -8,14 +8,10 @@ notifications:
    - raphael.pinson@camptocamp.com
 env:
 # base env
-  # Test Puppet 4
-  - PUPPET=4.0 RUBY_AUGEAS=0.5
-  # Test Oldest Puppet, Inc. supported Puppet
-  - PUPPET=4.10.4 RUBY_AUGEAS=0.5 FORGE_PUBLISH=true
   # Test latest Puppet 5 version
   - PUPPET=5.5 RUBY_AUGEAS=0.5
   # Test latest Puppet version
-  - PUPPET=6 RUBY_AUGEAS=0.5
+  - PUPPET=6 RUBY_AUGEAS=0.5 FORGE_PUBLISH=true
 
 matrix:
   fast_finish: true
