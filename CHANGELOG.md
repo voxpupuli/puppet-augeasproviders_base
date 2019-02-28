@@ -3,7 +3,7 @@
 ## 2.1.0
 
 - tests: load lenses from lib/augeas/lenses
-- add support for Puppet 4, 5 & 6
+- add support for Puppet 5 & 6
 - deprecate support for Puppet 2 & 3
 - update supported OSes in metadata.json
 - raise exception on missing augeasproviders_core
