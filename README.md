@@ -4,6 +4,7 @@
 [![Build Status](https://img.shields.io/travis/hercules-team/augeasproviders_base/master.svg)](https://travis-ci.org/hercules-team/augeasproviders_base)
 [![Coverage Status](https://img.shields.io/coveralls/hercules-team/augeasproviders_base.svg)](https://coveralls.io/r/hercules-team/augeasproviders_base)
 [![Gemnasium](https://img.shields.io/gemnasium/hercules-team/augeasproviders_base.svg)](https://gemnasium.com/hercules-team/augeasproviders_base)
+[![Sponsor](https://img.shields.io/badge/%E2%99%A5-Sponsor-hotpink.svg)](https://github.com/sponsors/raphink)
 
 
 # base: additional providers for Puppet base types
