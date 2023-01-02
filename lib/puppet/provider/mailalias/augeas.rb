@@ -1,14 +1,17 @@
+# frozen_string_literal: true
+
 # Alternative Augeas-based provider for mailalias type (Puppet builtin)
 #
 # Copyright (c) 2012 Dominic Cleal
 # Licensed under the Apache License, Version 2.0
 
-raise("Missing augeasproviders_core dependency") if Puppet::Type.type(:augeasprovider).nil?
-Puppet::Type.type(:mailalias).provide(:augeas, :parent => Puppet::Type.type(:augeasprovider).provider(:default)) do
-  desc "Uses Augeas API to update mail aliases file"
+raise('Missing augeasproviders_core dependency') if Puppet::Type.type(:augeasprovider).nil?
 
-  confine :feature => :augeas
-  defaultfor :feature => :augeas
+Puppet::Type.type(:mailalias).provide(:augeas, parent: Puppet::Type.type(:augeasprovider).provider(:default)) do
+  desc 'Uses Augeas API to update mail aliases file'
+
+  confine feature: :augeas
+  defaultfor feature: :augeas
 
   default_file { '/etc/aliases' }
   lens { 'Aliases.lns' }
@@ -19,23 +22,20 @@ Puppet::Type.type(:mailalias).provide(:augeas, :parent => Puppet::Type.type(:aug
 
   def self.get_resource(aug, apath, target)
     malias = {
-      :ensure => :present,
-      :target => target
+      ensure: :present,
+      target: target
     }
-    return nil unless malias[:name] = aug.get("#{apath}/name")
+    return nil unless malias[:name] == aug.get("#{apath}/name")
 
     rcpts = aug.match("#{apath}/value").map { |p| unquoteit(aug.get(p)) }
     malias[:recipient] = rcpts
     malias
   end
 
-  def self.get_resources(resource=nil)
-    aug = nil
+  def self.get_resources(resource = nil)
     file = target(resource)
     augopen(resource) do |aug|
-      resources = aug.match("$target/*").map {
-        |p| get_resource(aug, p, file)
-      }.compact.map { |r| new(r) }
+      resources = aug.match('$target/*').map { |p| get_resource(aug, p, file) }.compact.map { |r| new(r) }
       resources
     end
   end
@@ -46,40 +46,38 @@ Puppet::Type.type(:mailalias).provide(:augeas, :parent => Puppet::Type.type(:aug
 
   def self.prefetch(resources)
     targets = []
-    resources.each do |name, resource|
+    resources.each do |_name, resource|
       targets << target(resource) unless targets.include? target(resource)
     end
     maliases = []
     targets.each do |target|
-      maliases += get_resources({:target => target})
+      maliases += get_resources({ target: target })
     end
-    maliases = targets.inject([]) { |malias ,target| maliases += get_resources({:target => target}) }
+    maliases = targets.reduce([]) { |_acc, elem| maliases += get_resources({ target: elem }) }
     resources.each do |name, resource|
-      if provider = maliases.find{ |malias| (malias.name == name and malias.target == target(resource)) }
-        resources[name].provider = provider
-      end
+      resources[name].provider = provider if provider == maliases.find { |malias| ((malias.name == name) && (malias.target == target(resource))) }
     end
   end
 
-  def exists? 
+  def exists?
     @property_hash[:ensure] == :present and @property_hash[:target] == self.class.target(resource)
   end
 
-  def create 
+  def create
     augopen do |aug|
       aug.defnode('resource', "$target/#{next_seq(aug.match('$target/*'))}", nil)
-      aug.set("$resource/name", resource[:name])
+      aug.set('$resource/name', resource[:name])
 
       resource[:recipient].each do |rcpt|
-        aug.set("$resource/value[last()+1]", quoteit(rcpt))
+        aug.set('$resource/value[last()+1]', quoteit(rcpt))
       end
 
       augsave!(aug)
       @property_hash = {
-        :ensure => :present,
-        :name => resource.name,
-        :target => self.class.target(resource),
-        :recipient => resource[:recipient]
+        ensure: :present,
+        name: resource.name,
+        target: self.class.target(resource),
+        recipient: resource[:recipient]
       }
     end
   end

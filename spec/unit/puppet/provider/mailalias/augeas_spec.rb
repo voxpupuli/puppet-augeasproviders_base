@@ -1,4 +1,5 @@
 #!/usr/bin/env rspec
+# frozen_string_literal: true
 
 require 'spec_helper'
 
@@ -10,184 +11,184 @@ def fullquotes_supported?
 end
 
 describe provider_class do
-  before :each do
+  before do
     FileTest.stubs(:exist?).returns false
     FileTest.stubs(:exist?).with('/etc/aliases').returns true
   end
 
-  context "with empty file" do
-    let(:tmptarget) { aug_fixture("empty") }
+  context 'with empty file' do
+    let(:tmptarget) { aug_fixture('empty') }
     let(:target) { tmptarget.path }
 
-    it "should create simple new entry" do
+    it 'creates simple new entry' do
       apply!(Puppet::Type.type(:mailalias).new(
-        :name      => "foo",
-        :recipient => "bar",
-        :target    => target,
-        :provider  => "augeas"
-      ))
+               name: 'foo',
+               recipient: 'bar',
+               target: target,
+               provider: 'augeas'
+             ))
 
-      aug_open(target, "Aliases.lns") do |aug|
-        aug.get("./1/name").should == "foo"
-        aug.get("./1/value").should == "bar"
+      aug_open(target, 'Aliases.lns') do |aug|
+        aug.get('./1/name').should eq('foo')
+        aug.get('./1/value').should eq('bar')
       end
     end
 
-    it "should create two new entries" do
+    it 'creates two new entries' do
       apply!(
         Puppet::Type.type(:mailalias).new(
-          :name      => "foo",
-          :recipient => "bar",
-          :target    => target,
-          :provider  => "augeas"
+          name: 'foo',
+          recipient: 'bar',
+          target: target,
+          provider: 'augeas'
         ),
         Puppet::Type.type(:mailalias).new(
-          :name      => "bar",
-          :recipient => "baz",
-          :target    => target,
-          :provider  => "augeas"
+          name: 'bar',
+          recipient: 'baz',
+          target: target,
+          provider: 'augeas'
         )
       )
 
-      aug_open(target, "Aliases.lns") do |aug|
-        aug.match("*/name").size.should == 2
+      aug_open(target, 'Aliases.lns') do |aug|
+        aug.match('*/name').size.should == 2
       end
     end
 
-    it "should create new entry" do
+    it 'creates new entry' do
       apply!(Puppet::Type.type(:mailalias).new(
-        :name      => "foo",
-        :recipient => [ "foo-a", "foo-b" ],
-        :target    => target,
-        :provider  => "augeas"
-      ))
+               name: 'foo',
+               recipient: %w[foo-a foo-b],
+               target: target,
+               provider: 'augeas'
+             ))
 
-      aug_open(target, "Aliases.lns") do |aug|
-        aug.get("./1/name").should == "foo"
-        aug.match("./1/value").size.should == 2
-        aug.get("./1/value[1]").should == "foo-a"
-        aug.get("./1/value[2]").should == "foo-b"
+      aug_open(target, 'Aliases.lns') do |aug|
+        aug.get('./1/name').should eq('foo')
+        aug.match('./1/value').size.should eq(2)
+        aug.get('./1/value[1]').should eq('foo-a')
+        aug.get('./1/value[2]').should eq('foo-b')
       end
     end
 
     # Ticket #41
-    context "when full quotes are supported", :if => fullquotes_supported? do
-      it "should create new entry with quotes" do
+    context 'when full quotes are supported', if: fullquotes_supported? do
+      it 'creates new entry with quotes' do
         apply!(Puppet::Type.type(:mailalias).new(
-          :name      => "users-leave",
-          :recipient => "| /var/lib/mailman/mail/mailman leave users",
-          :target    => target,
-          :provider  => "augeas"
-        ))
+                 name: 'users-leave',
+                 recipient: '| /var/lib/mailman/mail/mailman leave users',
+                 target: target,
+                 provider: 'augeas'
+               ))
 
-        aug_open(target, "Aliases.lns") do |aug|
-          aug.get("./1/name").should == "users-leave"
-          aug.get("./1/value").should == "\"| /var/lib/mailman/mail/mailman leave users\""
+        aug_open(target, 'Aliases.lns') do |aug|
+          aug.get('./1/name').should eq('users-leave')
+          aug.get('./1/value').should eq('"| /var/lib/mailman/mail/mailman leave users"')
         end
       end
     end
   end
 
-  context "with full file" do
-    let(:tmptarget) { aug_fixture("full") }
+  context 'with full file' do
+    let(:tmptarget) { aug_fixture('full') }
     let(:target) { tmptarget.path }
 
-    it "should list instances" do
+    it 'lists instances' do
       provider_class.stubs(:target).returns(target)
-      inst = provider_class.instances.map { |p|
+      inst = provider_class.instances.map do |p|
         {
-          :name => p.get(:name),
-          :ensure => p.get(:ensure),
-          :recipient => p.get(:recipient),
+          name: p.get(:name),
+          ensure: p.get(:ensure),
+          recipient: p.get(:recipient),
         }
-      }
+      end
 
-      inst.size.should == 3
-      inst[0].should == {:name=>"mailer-daemon", :ensure=>:present, :recipient=>["postmaster"]}
-      inst[1].should == {:name=>"postmaster", :ensure=>:present, :recipient=>["root"]}
-      inst[2].should == {:name=>"test", :ensure=>:present, :recipient=>["user1", "user2"]}
+      inst.size.should eq(3)
+      inst[0].should eq({ name: 'mailer-daemon', ensure: :present, recipient: ['postmaster'] })
+      inst[1].should eq({ name: 'postmaster', ensure: :present, recipient: ['root'] })
+      inst[2].should eq({ name: 'test', ensure: :present, recipient: %w[user1 user2] })
     end
 
-    it "should delete entries" do
+    it 'deletes entries' do
       apply!(Puppet::Type.type(:mailalias).new(
-        :name     => "mailer-daemon",
-        :ensure   => "absent",
-        :target   => target,
-        :provider => "augeas"
-      ))
+               name: 'mailer-daemon',
+               ensure: 'absent',
+               target: target,
+               provider: 'augeas'
+             ))
 
-      aug_open(target, "Aliases.lns") do |aug|
+      aug_open(target, 'Aliases.lns') do |aug|
         aug.match("*[name = 'mailer-daemon']").should == []
       end
     end
 
-    describe "when updating recipients" do
-      it "should replace a recipients" do
+    describe 'when updating recipients' do
+      it 'replaces a recipients' do
         apply!(Puppet::Type.type(:mailalias).new(
-          :name      => "mailer-daemon",
-          :recipient => [ "test" ],
-          :target    => target,
-          :provider  => "augeas"
-        ))
+                 name: 'mailer-daemon',
+                 recipient: ['test'],
+                 target: target,
+                 provider: 'augeas'
+               ))
 
-        aug_open(target, "Aliases.lns") do |aug|
-          aug.get("./1/name").should == "mailer-daemon"
-          aug.match("./1/value").size.should == 1
-          aug.get("./1/value").should == "test"
+        aug_open(target, 'Aliases.lns') do |aug|
+          aug.get('./1/name').should eq('mailer-daemon')
+          aug.match('./1/value').size.should eq(1)
+          aug.get('./1/value').should eq('test')
         end
       end
 
-      it "should add multiple recipients" do
+      it 'adds multiple recipients' do
         apply!(Puppet::Type.type(:mailalias).new(
-          :name      => "mailer-daemon",
-          :recipient => [ "test-a", "test-b" ],
-          :target    => target,
-          :provider  => "augeas"
-        ))
+                 name: 'mailer-daemon',
+                 recipient: %w[test-a test-b],
+                 target: target,
+                 provider: 'augeas'
+               ))
 
-        aug_open(target, "Aliases.lns") do |aug|
-          aug.get("./1/name").should == "mailer-daemon"
-          aug.match("./1/value").size.should == 2
-          aug.get("./1/value[1]").should == "test-a"
-          aug.get("./1/value[2]").should == "test-b"
+        aug_open(target, 'Aliases.lns') do |aug|
+          aug.get('./1/name').should eq('mailer-daemon')
+          aug.match('./1/value').size.should eq(2)
+          aug.get('./1/value[1]').should eq('test-a')
+          aug.get('./1/value[2]').should eq('test-b')
         end
       end
 
       # Ticket #41
-      context "when full quotes are supported", :if => fullquotes_supported? do
-        let(:tmptarget) { aug_fixture("fullquotes") }
+      context 'when full quotes are supported', if: fullquotes_supported? do
+        let(:tmptarget) { aug_fixture('fullquotes') }
         let(:target) { tmptarget.path }
 
-        it "should update entry with quotes" do
+        it 'updates entry with quotes' do
           apply!(Puppet::Type.type(:mailalias).new(
-            :name      => "users-leave",
-            :recipient => "| /var/lib/mailman/mail/mailman leave userss",
-            :target    => target,
-            :provider  => "augeas"
-          ))
+                   name: 'users-leave',
+                   recipient: '| /var/lib/mailman/mail/mailman leave userss',
+                   target: target,
+                   provider: 'augeas'
+                 ))
 
-          aug_open(target, "Aliases.lns") do |aug|
-            aug.get("./4/name").should == "users-leave"
-            aug.get("./4/value").should == "\"| /var/lib/mailman/mail/mailman leave userss\""
+          aug_open(target, 'Aliases.lns') do |aug|
+            aug.get('./4/name').should eq('users-leave')
+            aug.get('./4/value').should eq('"| /var/lib/mailman/mail/mailman leave userss"')
           end
         end
       end
     end
   end
 
-  context "with broken file" do
-    let(:tmptarget) { aug_fixture("broken") }
+  context 'with broken file' do
+    let(:tmptarget) { aug_fixture('broken') }
     let(:target) { tmptarget.path }
 
-    it "should fail to load" do
-      expect {
+    it 'fails to load' do
+      expect do
         apply(Puppet::Type.type(:mailalias).new(
-          :name      => "foo",
-          :recipient => "bar",
-          :target    => target,
-          :provider  => "augeas"
-        ))
-      }.to raise_error(RuntimeError, /Augeas didn't load/)
+                name: 'foo',
+                recipient: 'bar',
+                target: target,
+                provider: 'augeas'
+              ))
+      end.to raise_error(RuntimeError, %r{Augeas didn't load})
     end
   end
 end

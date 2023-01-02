@@ -1,18 +1,21 @@
+# frozen_string_literal: true
+
 # Alternative Augeas-based provider for host type (Puppet builtin)
 #
 # Copyright (c) 2012 Dominic Cleal
 # Licensed under the Apache License, Version 2.0
 
-raise("Missing augeasproviders_core dependency") if Puppet::Type.type(:augeasprovider).nil?
-Puppet::Type.type(:host).provide(:augeas, :parent => Puppet::Type.type(:augeasprovider).provider(:default)) do
-  desc "Uses Augeas API to update hosts file"
+raise('Missing augeasproviders_core dependency') if Puppet::Type.type(:augeasprovider).nil?
+
+Puppet::Type.type(:host).provide(:augeas, parent: Puppet::Type.type(:augeasprovider).provider(:default)) do
+  desc 'Uses Augeas API to update hosts file'
 
   default_file do
     case Facter.value(:operatingsystem)
-    when "Solaris"
-      "/etc/inet/hosts"
+    when 'Solaris'
+      '/etc/inet/hosts'
     else
-      "/etc/hosts"
+      '/etc/hosts'
     end
   end
 
@@ -22,15 +25,16 @@ Puppet::Type.type(:host).provide(:augeas, :parent => Puppet::Type.type(:augeaspr
     "$target/*[canonical = '#{resource[:name]}']"
   end
 
-  confine :feature => :augeas
-  defaultfor :feature => :augeas
+  confine feature: :augeas
+  defaultfor feature: :augeas
 
   def self.get_resource(aug, hpath, target)
     host = {
-      :ensure => :present,
-      :target => target
+      ensure: :present,
+      target: target
     }
-    return nil unless host[:name] = aug.get("#{hpath}/canonical")
+    return nil unless host[:name] == aug.get("#{hpath}/canonical")
+
     host[:ip] = aug.get("#{hpath}/ipaddr")
 
     aliases = aug.match("#{hpath}/alias").map { |apath| aug.get(apath) }
@@ -42,11 +46,9 @@ Puppet::Type.type(:host).provide(:augeas, :parent => Puppet::Type.type(:augeaspr
     host
   end
 
-  def self.get_resources(resource=nil)
+  def self.get_resources(resource = nil)
     augopen(resource) do |aug|
-      resources = aug.match('$target/*').map {
-        |p| get_resource(aug, p, target(resource))
-      }.compact.map { |r| new(r) }
+      resources = aug.match('$target/*').map { |p| get_resource(aug, p, target(resource)) }.compact.map { |r| new(r) }
       resources
     end
   end
@@ -57,14 +59,12 @@ Puppet::Type.type(:host).provide(:augeas, :parent => Puppet::Type.type(:augeaspr
 
   def self.prefetch(resources)
     targets = []
-    resources.each do |name, resource|
+    resources.each do |_name, resource|
       targets << target(resource) unless targets.include? target(resource)
     end
-    hosts = targets.inject([]) { |hosts,target| hosts += get_resources({:target => target}) }
+    hosts = targets.reduce([]) { |_acc, elem| hosts += get_resources({ target: elem }) }
     resources.each do |name, resource|
-      if provider = hosts.find { |host| (host.name == name and host.target == target(resource)) }
-        resources[name].provider = provider
-      end
+      resources[name].provider = provider if provider == hosts.find { |host| ((host.name == name) && (host.target == target(resource))) }
     end
     resources
   end
@@ -88,21 +88,17 @@ Puppet::Type.type(:host).provide(:augeas, :parent => Puppet::Type.type(:augeaspr
       end
 
       # comment property only available in Puppet 2.7+
-      if Puppet::Type.type(:host).validattr? :comment and resource[:comment]
-        aug.set('$resource/#comment', resource[:comment])
-      end
+      aug.set('$resource/#comment', resource[:comment]) if Puppet::Type.type(:host).validattr?(:comment) && resource[:comment]
     end
 
     @property_hash = {
-      :ensure => :present,
-      :name => resource.name,
-      :target => resource[:target],
-      :ip => resource[:ip],
-      :host_aliases => resource[:host_aliases],
+      ensure: :present,
+      name: resource.name,
+      target: resource[:target],
+      ip: resource[:ip],
+      host_aliases: resource[:host_aliases],
     }
-    if Puppet::Type.type(:host).validattr? :comment and resource[:comment]
-      @property_hash[:comment] = resource[:comment] || ""
-    end
+    @property_hash[:comment] = resource[:comment] || '' if Puppet::Type.type(:host).validattr?(:comment) && resource[:comment]
   end
 
   def destroy
@@ -132,7 +128,7 @@ Puppet::Type.type(:host).provide(:augeas, :parent => Puppet::Type.type(:augeaspr
     if resource.should(:host_aliases).is_a? Array
       aliases
     else
-      aliases.join(" ")
+      aliases.join(' ')
     end
   end
 
@@ -140,19 +136,19 @@ Puppet::Type.type(:host).provide(:augeas, :parent => Puppet::Type.type(:augeaspr
     augopen! do |aug|
       aug.rm('$resource/alias')
 
-      insafter = "canonical"
+      insafter = 'canonical'
       values = values.split unless values.is_a? Array
       values.each do |halias|
-        aug.insert("$resource/#{insafter}", "alias", false)
-        aug.set("$resource/alias[last()]", halias)
-        insafter = "alias[last()]"
+        aug.insert("$resource/#{insafter}", 'alias', false)
+        aug.set('$resource/alias[last()]', halias)
+        insafter = 'alias[last()]'
       end
     end
     @property_hash[:host_aliases] = values
   end
 
   def comment
-    @property_hash[:comment] || ""
+    @property_hash[:comment] || ''
   end
 
   def comment=(value)
