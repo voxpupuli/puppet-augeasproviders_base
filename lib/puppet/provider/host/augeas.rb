@@ -62,7 +62,7 @@ Puppet::Type.type(:host).provide(:augeas, parent: Puppet::Type.type(:augeasprovi
     resources.values do |resource|
       targets << target(resource) unless targets.include? target(resource)
     end
-    hosts = targets.reduce([]) { |acc, elem| acc += get_resources({ target: elem }) }
+    hosts = targets.reduce([]) { |acc, elem| acc + get_resources({ target: elem }) }
     resources.each do |name, resource|
       resources[name].provider = provider if provider == hosts.find { |host| ((host.name == name) && (host.target == target(resource))) }
     end

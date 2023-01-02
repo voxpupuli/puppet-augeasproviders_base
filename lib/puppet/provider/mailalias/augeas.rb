@@ -53,7 +53,7 @@ Puppet::Type.type(:mailalias).provide(:augeas, parent: Puppet::Type.type(:augeas
     targets.each do |target|
       maliases += get_resources({ target: target })
     end
-    maliases = targets.reduce([]) { |acc, elem| acc += get_resources({ target: elem }) }
+    maliases = targets.reduce([]) { |acc, elem| acc + get_resources({ target: elem }) }
     resources.each do |name, resource|
       resources[name].provider = provider if provider == maliases.find { |malias| ((malias.name == name) && (malias.target == target(resource))) }
     end
