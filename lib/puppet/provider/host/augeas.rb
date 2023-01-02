@@ -59,10 +59,10 @@ Puppet::Type.type(:host).provide(:augeas, parent: Puppet::Type.type(:augeasprovi
 
   def self.prefetch(resources)
     targets = []
-    resources.each do |_name, resource|
+    resources.values do |resource|
       targets << target(resource) unless targets.include? target(resource)
     end
-    hosts = targets.reduce([]) { |_acc, elem| hosts += get_resources({ target: elem }) }
+    hosts = targets.reduce([]) { |acc, elem| acc += get_resources({ target: elem }) }
     resources.each do |name, resource|
       resources[name].provider = provider if provider == hosts.find { |host| ((host.name == name) && (host.target == target(resource))) }
     end
@@ -87,8 +87,7 @@ Puppet::Type.type(:host).provide(:augeas, parent: Puppet::Type.type(:augeasprovi
         end
       end
 
-      # comment property only available in Puppet 2.7+
-      aug.set('$resource/#comment', resource[:comment]) if Puppet::Type.type(:host).validattr?(:comment) && resource[:comment]
+      aug.set('$resource/#comment', resource[:comment]) if resource[:comment]
     end
 
     @property_hash = {
@@ -98,7 +97,7 @@ Puppet::Type.type(:host).provide(:augeas, parent: Puppet::Type.type(:augeasprovi
       ip: resource[:ip],
       host_aliases: resource[:host_aliases],
     }
-    @property_hash[:comment] = resource[:comment] || '' if Puppet::Type.type(:host).validattr?(:comment) && resource[:comment]
+    @property_hash[:comment] = resource[:comment] || '' if resource[:comment]
   end
 
   def destroy

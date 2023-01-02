@@ -46,14 +46,14 @@ Puppet::Type.type(:mailalias).provide(:augeas, parent: Puppet::Type.type(:augeas
 
   def self.prefetch(resources)
     targets = []
-    resources.each do |_name, resource|
+    resources.values do |resource|
       targets << target(resource) unless targets.include? target(resource)
     end
     maliases = []
     targets.each do |target|
       maliases += get_resources({ target: target })
     end
-    maliases = targets.reduce([]) { |_acc, elem| maliases += get_resources({ target: elem }) }
+    maliases = targets.reduce([]) { |acc, elem| acc += get_resources({ target: elem }) }
     resources.each do |name, resource|
       resources[name].provider = provider if provider == maliases.find { |malias| ((malias.name == name) && (malias.target == target(resource))) }
     end
