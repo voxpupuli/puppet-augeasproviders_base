@@ -8,6 +8,4 @@ fixtures:
       puppet_version: '>= 6.0.0'
   repositories:
     augeasproviders_core:
-      repo: "git://github.com/hercules-team/augeasproviders_core.git"
-  symlinks:
-    augeasproviders_base: "#{source_dir}"
+      repo: "https://github.com/voxpupuli/puppet-augeasproviders_core"
