@@ -1,17 +1,17 @@
 {
-  "name": "herculesteam-augeasproviders_base",
+  "name": "puppet-augeasproviders_base",
   "version": "2.1.0",
   "author": "Raphael Pinson",
   "summary": "Augeas-based base providers for Puppet",
   "license": "Apache-2.0",
-  "source": "https://github.com/hercules-team/augeasproviders_base",
+  "source": "https://github.com/voxpupuli/puppet-augeasproviders_base",
   "project_page": "http://augeasproviders.com",
-  "issues_url": "https://github.com/hercules-team/augeasproviders_base/issues",
+  "issues_url": "https://github.com/voxpupuli/puppet-augeasproviders_base/issues",
   "description": "This module provides providers for Puppet base types using the Augeas configuration API library.",
   "dependencies": [
     {
-      "name": "herculesteam/augeasproviders_core",
-      "version_requirement": ">=2.4.0 < 3.0.0"
+      "name": "voxpupuli/augeasproviders_core",
+      "version_requirement": ">=3.0.0 < 4.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -44,7 +44,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 5.0.0 < 7.0.0"
+      "version_requirement": ">= 6.1.0 < 8.0.0"
     }
   ]
 }
