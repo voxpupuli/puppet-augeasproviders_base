@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Alternative Augeas-based provider for host type (Puppet builtin)
+# Alternative Augeas-based provider for host type
 #
 # Copyright (c) 2012 Dominic Cleal
 # Licensed under the Apache License, Version 2.0
@@ -33,7 +33,7 @@ Puppet::Type.type(:host).provide(:augeas, parent: Puppet::Type.type(:augeasprovi
       ensure: :present,
       target: target
     }
-    return nil unless host[:name] == aug.get("#{hpath}/canonical")
+    return nil unless (host[:name] = aug.get("#{hpath}/canonical"))
 
     host[:ip] = aug.get("#{hpath}/ipaddr")
 

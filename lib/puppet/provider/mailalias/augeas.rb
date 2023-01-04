@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Alternative Augeas-based provider for mailalias type (Puppet builtin)
+# Alternative Augeas-based provider for mailalias type
 #
 # Copyright (c) 2012 Dominic Cleal
 # Licensed under the Apache License, Version 2.0
@@ -25,7 +25,7 @@ Puppet::Type.type(:mailalias).provide(:augeas, parent: Puppet::Type.type(:augeas
       ensure: :present,
       target: target
     }
-    return nil unless malias[:name] == aug.get("#{apath}/name")
+    return nil unless (malias[:name] = aug.get("#{apath}/name"))
 
     rcpts = aug.match("#{apath}/value").map { |p| unquoteit(aug.get(p)) }
     malias[:recipient] = rcpts
