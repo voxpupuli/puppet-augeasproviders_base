@@ -5,15 +5,10 @@ require 'spec_helper'
 
 provider_class = Puppet::Type.type(:mailalias).provider(:augeas)
 
-def fullquotes_supported?
-  # This lens breaks on Augeas 0.10.0
-  Puppet::Util::Package.versioncmp(Puppet::Type.type(:mailalias).provider(:augeas).aug_version, '0.10.0') > 0
-end
-
 describe provider_class do
   before do
-    FileTest.stubs(:exist?).returns false
-    FileTest.stubs(:exist?).with('/etc/aliases').returns true
+    allow(FileTest).to receive(:exist?).and_return(false)
+    allow(FileTest).to receive(:exist?).with('/etc/aliases').and_return(true)
   end
 
   context 'with empty file' do
@@ -72,7 +67,7 @@ describe provider_class do
     end
 
     # Ticket #41
-    context 'when full quotes are supported', if: fullquotes_supported? do
+    context 'when full quotes are supported' do
       it 'creates new entry with quotes' do
         apply!(Puppet::Type.type(:mailalias).new(
                  name: 'users-leave',
@@ -155,7 +150,7 @@ describe provider_class do
       end
 
       # Ticket #41
-      context 'when full quotes are supported', if: fullquotes_supported? do
+      context 'when full quotes are supported' do
         let(:tmptarget) { aug_fixture('fullquotes') }
         let(:target) { tmptarget.path }
 
