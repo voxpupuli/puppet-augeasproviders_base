@@ -87,8 +87,7 @@ Puppet::Type.type(:host).provide(:augeas, :parent => Puppet::Type.type(:augeaspr
         end
       end
 
-      # comment property only available in Puppet 2.7+
-      if Puppet::Type.type(:host).validattr? :comment and resource[:comment]
+      if resource[:comment]
         aug.set('$resource/#comment', resource[:comment])
       end
     end

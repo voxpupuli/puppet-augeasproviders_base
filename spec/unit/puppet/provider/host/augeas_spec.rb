@@ -5,17 +5,6 @@ require 'spec_helper'
 provider_class = Puppet::Type.type(:host).provider(:augeas)
 
 describe provider_class do
-  before :all do
-    # Pre-2.7.0, there was no comment property on the host type so this will
-    # produce errors while testing against old versions, so add it.
-    # Don't call validattr? or this keeps a negative cache of the property
-    unless Puppet::Type.type(:host).validproperty? :comment
-      Puppet::Type.type(:host).newproperty(:comment) do
-        desc "Monkey patched"
-      end
-    end
-  end
-
   before :each do
     FileTest.stubs(:exist?).returns false
     FileTest.stubs(:exist?).with('/etc/hosts').returns true
@@ -262,36 +251,6 @@ describe provider_class do
           :provider => "augeas"
         ))
       }.to raise_error(RuntimeError, /Augeas didn't load/)
-    end
-  end
-
-  context "without comment property on <2.7" do
-    let(:tmptarget) { aug_fixture("full") }
-    let(:target) { tmptarget.path }
-
-    before :each do
-      # Change Puppet::Type::Host.validattr? to return false instead for
-      # comment so it throws the same errors as Puppet < 2.7
-      validattr = Puppet::Type.type(:host).method(:validattr?)
-      Puppet::Type.type(:host).stubs(:validattr?).with { |arg| validattr.call(arg) }.returns(true)
-      Puppet::Type.type(:host).stubs(:validattr?).with { |arg| ! validattr.call(arg) }.returns(false)
-      Puppet::Type.type(:host).stubs(:validattr?).with(:comment).returns(false)
-    end
-
-    it "should create simple new entry" do
-      apply!(Puppet::Type.type(:host).new(
-        :name     => "foo",
-        :ip       => "192.168.1.1",
-        :target   => target,
-        :provider => "augeas"
-      ))
-
-      augparse_filter(target, "Hosts.lns", "*[canonical='foo']", '
-         { "1"
-           { "ipaddr" = "192.168.1.1" }
-           { "canonical" = "foo" }
-         }
-      ')
     end
   end
 end
