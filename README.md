@@ -28,7 +28,7 @@ See [Puppet/Augeas pre-requisites](http://docs.puppetlabs.com/guides/augeas.html
 
 ## Installing
 
-On Puppet 2.7.14+, the module can be installed easily ([documentation](http://docs.puppetlabs.com/puppet/latest/reference/modules_installing.html)):
+The module can be installed easily ([documentation](http://docs.puppetlabs.com/puppet/latest/reference/modules_installing.html)):
 
     puppet module install herculesteam/augeasproviders_base
 
@@ -37,7 +37,7 @@ On Puppet 2.7.14+, the module can be installed easily ([documentation](http://do
 
 ### Puppet versions
 
-Minimum of Puppet 2.7.
+See `metadata.json`.
 
 ### Augeas versions
 
@@ -58,8 +58,6 @@ This is a provider for a type distributed in Puppet core: [host type
 reference](http://docs.puppetlabs.com/references/stable/type.html#host).
 
 The provider needs to be explicitly given as `augeas` to use `augeasproviders`.
-
-The `comment` parameter is only supported on Puppet 2.7 and higher.
 
 #### manage simple entry
 

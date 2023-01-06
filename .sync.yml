@@ -1,7 +1,10 @@
 ---
-.travis.yml:
-  forge_password: "caiacgWrTVEVo9R5MoGKenc8vUPl8n6/ENL4CF2qFFMWMKe1RFfuFQSvqe41GsZt1zUDUrUBSX5kcPVKNjeW/mQGfUyV2hhpfBzAGN+k/ZMkXGGoNOpgGibCM/f/2zZOxiZySwhzqjRr9pYbWpd/pnsLkS/iFBvqUf0ebvUOhWA="
+.github/workflows/ci.yml:
+  additional_packages: 'libaugeas-dev augeas-tools'
+Gemfile:
+  optional:
+    ':test':
+      - gem: ruby-augeas
 spec/spec_helper.rb:
-  puppet_core_modules:
-    - host_core
-    - mailalias_core
+  spec_overrides:
+    - "require 'spec_helper_local'"
