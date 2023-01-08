@@ -9,7 +9,7 @@
   "description": "This module provides providers for Puppet base types using the Augeas configuration API library.",
   "dependencies": [
     {
-      "name": "voxpupuli/augeasproviders_core",
+      "name": "puppet/augeasproviders_core",
       "version_requirement": ">=3.0.0 < 4.0.0"
     }
   ],
