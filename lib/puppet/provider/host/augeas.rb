@@ -4,6 +4,7 @@
 # Licensed under the Apache License, Version 2.0
 
 raise("Missing augeasproviders_core dependency") if Puppet::Type.type(:augeasprovider).nil?
+
 Puppet::Type.type(:host).provide(:augeas, :parent => Puppet::Type.type(:augeasprovider).provider(:default)) do
   desc "Uses Augeas API to update hosts file"
 
@@ -31,6 +32,7 @@ Puppet::Type.type(:host).provide(:augeas, :parent => Puppet::Type.type(:augeaspr
       :target => target
     }
     return nil unless host[:name] = aug.get("#{hpath}/canonical")
+
     host[:ip] = aug.get("#{hpath}/ipaddr")
 
     aliases = aug.match("#{hpath}/alias").map { |apath| aug.get(apath) }
@@ -42,10 +44,10 @@ Puppet::Type.type(:host).provide(:augeas, :parent => Puppet::Type.type(:augeaspr
     host
   end
 
-  def self.get_resources(resource=nil)
+  def self.get_resources(resource = nil)
     augopen(resource) do |aug|
-      resources = aug.match('$target/*').map {
-        |p| get_resource(aug, p, target(resource))
+      resources = aug.match('$target/*').map { |p|
+        get_resource(aug, p, target(resource))
       }.compact.map { |r| new(r) }
       resources
     end
@@ -60,7 +62,7 @@ Puppet::Type.type(:host).provide(:augeas, :parent => Puppet::Type.type(:augeaspr
     resources.each do |name, resource|
       targets << target(resource) unless targets.include? target(resource)
     end
-    hosts = targets.inject([]) { |hosts,target| hosts += get_resources({:target => target}) }
+    hosts = targets.inject([]) { |hosts, target| hosts += get_resources({ :target => target }) }
     resources.each do |name, resource|
       if provider = hosts.find { |host| (host.name == name and host.target == target(resource)) }
         resources[name].provider = provider

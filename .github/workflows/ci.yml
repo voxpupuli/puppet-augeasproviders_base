@@ -16,4 +16,3 @@ jobs:
     uses: voxpupuli/gha-puppet/.github/workflows/basic.yml@v1
     with:
       additional_packages: 'libaugeas-dev augeas-tools'
-      rubocop: false
