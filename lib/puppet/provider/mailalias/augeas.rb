@@ -4,6 +4,7 @@
 # Licensed under the Apache License, Version 2.0
 
 raise("Missing augeasproviders_core dependency") if Puppet::Type.type(:augeasprovider).nil?
+
 Puppet::Type.type(:mailalias).provide(:augeas, :parent => Puppet::Type.type(:augeasprovider).provider(:default)) do
   desc "Uses Augeas API to update mail aliases file"
 
@@ -29,12 +30,12 @@ Puppet::Type.type(:mailalias).provide(:augeas, :parent => Puppet::Type.type(:aug
     malias
   end
 
-  def self.get_resources(resource=nil)
+  def self.get_resources(resource = nil)
     aug = nil
     file = target(resource)
     augopen(resource) do |aug|
-      resources = aug.match("$target/*").map {
-        |p| get_resource(aug, p, file)
+      resources = aug.match("$target/*").map { |p|
+        get_resource(aug, p, file)
       }.compact.map { |r| new(r) }
       resources
     end
@@ -51,21 +52,21 @@ Puppet::Type.type(:mailalias).provide(:augeas, :parent => Puppet::Type.type(:aug
     end
     maliases = []
     targets.each do |target|
-      maliases += get_resources({:target => target})
+      maliases += get_resources({ :target => target })
     end
-    maliases = targets.inject([]) { |malias ,target| maliases += get_resources({:target => target}) }
+    maliases = targets.inject([]) { |malias, target| maliases += get_resources({ :target => target }) }
     resources.each do |name, resource|
-      if provider = maliases.find{ |malias| (malias.name == name and malias.target == target(resource)) }
+      if provider = maliases.find { |malias| (malias.name == name and malias.target == target(resource)) }
         resources[name].provider = provider
       end
     end
   end
 
-  def exists? 
+  def exists?
     @property_hash[:ensure] == :present and @property_hash[:target] == self.class.target(resource)
   end
 
-  def create 
+  def create
     augopen do |aug|
       aug.defnode('resource', "$target/#{next_seq(aug.match('$target/*'))}", nil)
       aug.set("$resource/name", resource[:name])

@@ -21,11 +21,11 @@ describe provider_class do
 
     it "should create simple new entry" do
       apply!(Puppet::Type.type(:mailalias).new(
-        :name      => "foo",
-        :recipient => "bar",
-        :target    => target,
-        :provider  => "augeas"
-      ))
+               :name      => "foo",
+               :recipient => "bar",
+               :target    => target,
+               :provider  => "augeas"
+             ))
 
       aug_open(target, "Aliases.lns") do |aug|
         aug.get("./1/name").should == "foo"
@@ -56,11 +56,11 @@ describe provider_class do
 
     it "should create new entry" do
       apply!(Puppet::Type.type(:mailalias).new(
-        :name      => "foo",
-        :recipient => [ "foo-a", "foo-b" ],
-        :target    => target,
-        :provider  => "augeas"
-      ))
+               :name      => "foo",
+               :recipient => ["foo-a", "foo-b"],
+               :target    => target,
+               :provider  => "augeas"
+             ))
 
       aug_open(target, "Aliases.lns") do |aug|
         aug.get("./1/name").should == "foo"
@@ -74,11 +74,11 @@ describe provider_class do
     context "when full quotes are supported", :if => fullquotes_supported? do
       it "should create new entry with quotes" do
         apply!(Puppet::Type.type(:mailalias).new(
-          :name      => "users-leave",
-          :recipient => "| /var/lib/mailman/mail/mailman leave users",
-          :target    => target,
-          :provider  => "augeas"
-        ))
+                 :name      => "users-leave",
+                 :recipient => "| /var/lib/mailman/mail/mailman leave users",
+                 :target    => target,
+                 :provider  => "augeas"
+               ))
 
         aug_open(target, "Aliases.lns") do |aug|
           aug.get("./1/name").should == "users-leave"
@@ -103,18 +103,18 @@ describe provider_class do
       }
 
       inst.size.should == 3
-      inst[0].should == {:name=>"mailer-daemon", :ensure=>:present, :recipient=>["postmaster"]}
-      inst[1].should == {:name=>"postmaster", :ensure=>:present, :recipient=>["root"]}
-      inst[2].should == {:name=>"test", :ensure=>:present, :recipient=>["user1", "user2"]}
+      inst[0].should == { :name => "mailer-daemon", :ensure => :present, :recipient => ["postmaster"] }
+      inst[1].should == { :name => "postmaster", :ensure => :present, :recipient => ["root"] }
+      inst[2].should == { :name => "test", :ensure => :present, :recipient => ["user1", "user2"] }
     end
 
     it "should delete entries" do
       apply!(Puppet::Type.type(:mailalias).new(
-        :name     => "mailer-daemon",
-        :ensure   => "absent",
-        :target   => target,
-        :provider => "augeas"
-      ))
+               :name     => "mailer-daemon",
+               :ensure   => "absent",
+               :target   => target,
+               :provider => "augeas"
+             ))
 
       aug_open(target, "Aliases.lns") do |aug|
         aug.match("*[name = 'mailer-daemon']").should == []
@@ -124,11 +124,11 @@ describe provider_class do
     describe "when updating recipients" do
       it "should replace a recipients" do
         apply!(Puppet::Type.type(:mailalias).new(
-          :name      => "mailer-daemon",
-          :recipient => [ "test" ],
-          :target    => target,
-          :provider  => "augeas"
-        ))
+                 :name      => "mailer-daemon",
+                 :recipient => ["test"],
+                 :target    => target,
+                 :provider  => "augeas"
+               ))
 
         aug_open(target, "Aliases.lns") do |aug|
           aug.get("./1/name").should == "mailer-daemon"
@@ -139,11 +139,11 @@ describe provider_class do
 
       it "should add multiple recipients" do
         apply!(Puppet::Type.type(:mailalias).new(
-          :name      => "mailer-daemon",
-          :recipient => [ "test-a", "test-b" ],
-          :target    => target,
-          :provider  => "augeas"
-        ))
+                 :name      => "mailer-daemon",
+                 :recipient => ["test-a", "test-b"],
+                 :target    => target,
+                 :provider  => "augeas"
+               ))
 
         aug_open(target, "Aliases.lns") do |aug|
           aug.get("./1/name").should == "mailer-daemon"
@@ -160,11 +160,11 @@ describe provider_class do
 
         it "should update entry with quotes" do
           apply!(Puppet::Type.type(:mailalias).new(
-            :name      => "users-leave",
-            :recipient => "| /var/lib/mailman/mail/mailman leave userss",
-            :target    => target,
-            :provider  => "augeas"
-          ))
+                   :name      => "users-leave",
+                   :recipient => "| /var/lib/mailman/mail/mailman leave userss",
+                   :target    => target,
+                   :provider  => "augeas"
+                 ))
 
           aug_open(target, "Aliases.lns") do |aug|
             aug.get("./4/name").should == "users-leave"
@@ -182,11 +182,11 @@ describe provider_class do
     it "should fail to load" do
       expect {
         apply(Puppet::Type.type(:mailalias).new(
-          :name      => "foo",
-          :recipient => "bar",
-          :target    => target,
-          :provider  => "augeas"
-        ))
+                :name      => "foo",
+                :recipient => "bar",
+                :target    => target,
+                :provider  => "augeas"
+              ))
       }.to raise_error(RuntimeError, /Augeas didn't load/)
     end
   end
