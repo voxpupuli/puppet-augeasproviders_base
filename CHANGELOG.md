@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.0.0](https://github.com/voxpupuli/puppet-augeasproviders_base/tree/v4.0.0) (2023-06-22)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-augeasproviders_base/compare/v3.0.0...v4.0.0)
+
+**Breaking changes:**
+
+- EL: Drop 5 & 6; Add 8 & 9 support [\#22](https://github.com/voxpupuli/puppet-augeasproviders_base/pull/22) ([bastelfreak](https://github.com/bastelfreak))
+- Ubuntu: Drop 14.04 & 16.04; Add 20.04 & 22.04 [\#21](https://github.com/voxpupuli/puppet-augeasproviders_base/pull/21) ([bastelfreak](https://github.com/bastelfreak))
+- Drop Debian 7/8/9, add Debian 10/11 [\#20](https://github.com/voxpupuli/puppet-augeasproviders_base/pull/20) ([bastelfreak](https://github.com/bastelfreak))
+- Drop Puppet 6 support [\#15](https://github.com/voxpupuli/puppet-augeasproviders_base/pull/15) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Add puppet 8 support [\#19](https://github.com/voxpupuli/puppet-augeasproviders_base/pull/19) ([bastelfreak](https://github.com/bastelfreak))
+- puppet/augeasproviders\_core: Allow 4.x [\#17](https://github.com/voxpupuli/puppet-augeasproviders_base/pull/17) ([bastelfreak](https://github.com/bastelfreak))
+
+**Fixed bugs:**
+
+- Correct name of the augeasproviders\_core dependency [\#13](https://github.com/voxpupuli/puppet-augeasproviders_base/pull/13) ([ekohl](https://github.com/ekohl))
+
+**Merged pull requests:**
+
+- cleanup .fixtures.yml [\#18](https://github.com/voxpupuli/puppet-augeasproviders_base/pull/18) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v3.0.0](https://github.com/voxpupuli/puppet-augeasproviders_base/tree/v3.0.0) (2023-01-06)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-augeasproviders_base/compare/2.1.0...v3.0.0)
