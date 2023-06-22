@@ -1,11 +1,6 @@
+---
 fixtures:
-  forge_modules:
-    host_core:
-      repo: "puppetlabs/host_core"
-      puppet_version: '>= 6.0.0'
-    mailalias_core:
-      repo: "puppetlabs/mailalias_core"
-      puppet_version: '>= 6.0.0'
   repositories:
-    augeasproviders_core:
-      repo: "https://github.com/voxpupuli/puppet-augeasproviders_core"
+    augeasproviders_core: "https://github.com/voxpupuli/puppet-augeasproviders_core"
+    host_core: https://github.com/puppetlabs/puppetlabs-host_core
+    mailalias_core: https://github.com/puppetlabs/puppetlabs-mailalias_core
