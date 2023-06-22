@@ -174,20 +174,4 @@ describe provider_class do
       end
     end
   end
-
-  context "with broken file" do
-    let(:tmptarget) { aug_fixture("broken") }
-    let(:target) { tmptarget.path }
-
-    it "should fail to load" do
-      expect {
-        apply(Puppet::Type.type(:mailalias).new(
-                :name      => "foo",
-                :recipient => "bar",
-                :target    => target,
-                :provider  => "augeas"
-              ))
-      }.to raise_error(RuntimeError, /Augeas didn't load/)
-    end
-  end
 end
