@@ -1,6 +1,6 @@
 ---
 fixtures:
   repositories:
-    augeasproviders_core: "https://github.com/voxpupuli/puppet-augeasproviders_core"
+    augeasproviders_core: https://github.com/voxpupuli/puppet-augeasproviders_core
     host_core: https://github.com/puppetlabs/puppetlabs-host_core
     mailalias_core: https://github.com/puppetlabs/puppetlabs-mailalias_core
