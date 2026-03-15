@@ -19,7 +19,7 @@ describe provider_class do
                :name     => "foo",
                :ip       => "192.168.1.1",
                :target   => target,
-               :provider => "augeas"
+               :provider => "augeas",
              ))
 
       augparse(target, "Hosts.lns", '
@@ -37,7 +37,7 @@ describe provider_class do
                :host_aliases => ["foo-a", "foo-b"],
                :comment => "test",
                :target => target,
-               :provider => "augeas"
+               :provider => "augeas",
              ))
 
       augparse(target, "Hosts.lns", '
@@ -59,7 +59,7 @@ describe provider_class do
           :host_aliases => ["foo-a", "foo-b"],
           :comment => "test",
           :target => target,
-          :provider => "augeas"
+          :provider => "augeas",
         ),
         Puppet::Type.type(:host).new(
           :name => "bar",
@@ -67,8 +67,8 @@ describe provider_class do
           :host_aliases => ["bar-a", "bar-b"],
           :comment => "test",
           :target => target,
-          :provider => "augeas"
-        )
+          :provider => "augeas",
+        ),
       )
 
       aug_open(target, "Hosts.lns") do |aug|
@@ -105,7 +105,7 @@ describe provider_class do
                :name     => "iridium",
                :ensure   => "absent",
                :target   => target,
-               :provider => "augeas"
+               :provider => "augeas",
              ))
 
       aug_open(target, "Hosts.lns") do |aug|
@@ -118,7 +118,7 @@ describe provider_class do
                :name     => "iridium",
                :ip       => "1.2.3.4",
                :target   => target,
-               :provider => "augeas"
+               :provider => "augeas",
              ))
 
       augparse_filter(target, "Hosts.lns", "*[canonical='iridium']", '
@@ -136,7 +136,7 @@ describe provider_class do
                  :name => "argon",
                  :host_aliases => ["test-a"],
                  :target => target,
-                 :provider => "augeas"
+                 :provider => "augeas",
                ))
 
         augparse_filter(target, "Hosts.lns", "*[canonical='argon']", '
@@ -154,7 +154,7 @@ describe provider_class do
                  :name => "iridium",
                  :host_aliases => ["test-a"],
                  :target => target,
-                 :provider => "augeas"
+                 :provider => "augeas",
                ))
 
         augparse_filter(target, "Hosts.lns", "*[canonical='iridium']", '
@@ -171,7 +171,7 @@ describe provider_class do
                  :name => "iridium",
                  :host_aliases => ["test-a", "test-b"],
                  :target => target,
-                 :provider => "augeas"
+                 :provider => "augeas",
                ))
 
         augparse_filter(target, "Hosts.lns", "*[canonical='iridium']", '
@@ -189,7 +189,7 @@ describe provider_class do
                  :name => "iridium",
                  :host_aliases => [],
                  :target => target,
-                 :provider => "augeas"
+                 :provider => "augeas",
                ))
 
         augparse_filter(target, "Hosts.lns", "*[canonical='iridium']", '
@@ -207,7 +207,7 @@ describe provider_class do
                  :name     => "iridium",
                  :comment  => "test comment",
                  :target   => target,
-                 :provider => "augeas"
+                 :provider => "augeas",
                ))
 
         augparse_filter(target, "Hosts.lns", "*[canonical='iridium']", '
@@ -225,7 +225,7 @@ describe provider_class do
                  :name     => "argon",
                  :comment  => "",
                  :target   => target,
-                 :provider => "augeas"
+                 :provider => "augeas",
                ))
 
         augparse_filter(target, "Hosts.lns", "*[canonical='argon']", '

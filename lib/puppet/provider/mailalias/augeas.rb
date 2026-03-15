@@ -21,7 +21,7 @@ Puppet::Type.type(:mailalias).provide(:augeas, :parent => Puppet::Type.type(:aug
   def self.get_resource(aug, apath, target)
     malias = {
       :ensure => :present,
-      :target => target
+      :target => target,
     }
     return nil unless malias[:name] = aug.get("#{apath}/name")
 
@@ -47,7 +47,7 @@ Puppet::Type.type(:mailalias).provide(:augeas, :parent => Puppet::Type.type(:aug
 
   def self.prefetch(resources)
     targets = []
-    resources.each do |name, resource|
+    resources.each_value do |resource|
       targets << target(resource) unless targets.include? target(resource)
     end
     maliases = []
@@ -56,7 +56,7 @@ Puppet::Type.type(:mailalias).provide(:augeas, :parent => Puppet::Type.type(:aug
     end
     maliases = targets.inject([]) { |malias, target| maliases += get_resources({ :target => target }) }
     resources.each do |name, resource|
-      if provider = maliases.find { |malias| (malias.name == name and malias.target == target(resource)) }
+      if provider = maliases.find { |malias| malias.name == name and malias.target == target(resource) }
         resources[name].provider = provider
       end
     end
@@ -80,7 +80,7 @@ Puppet::Type.type(:mailalias).provide(:augeas, :parent => Puppet::Type.type(:aug
         :ensure => :present,
         :name => resource.name,
         :target => self.class.target(resource),
-        :recipient => resource[:recipient]
+        :recipient => resource[:recipient],
       }
     end
   end

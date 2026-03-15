@@ -24,7 +24,7 @@ describe provider_class do
                :name      => "foo",
                :recipient => "bar",
                :target    => target,
-               :provider  => "augeas"
+               :provider  => "augeas",
              ))
 
       aug_open(target, "Aliases.lns") do |aug|
@@ -39,14 +39,14 @@ describe provider_class do
           :name      => "foo",
           :recipient => "bar",
           :target    => target,
-          :provider  => "augeas"
+          :provider  => "augeas",
         ),
         Puppet::Type.type(:mailalias).new(
           :name      => "bar",
           :recipient => "baz",
           :target    => target,
-          :provider  => "augeas"
-        )
+          :provider  => "augeas",
+        ),
       )
 
       aug_open(target, "Aliases.lns") do |aug|
@@ -59,7 +59,7 @@ describe provider_class do
                :name      => "foo",
                :recipient => ["foo-a", "foo-b"],
                :target    => target,
-               :provider  => "augeas"
+               :provider  => "augeas",
              ))
 
       aug_open(target, "Aliases.lns") do |aug|
@@ -77,7 +77,7 @@ describe provider_class do
                  :name      => "users-leave",
                  :recipient => "| /var/lib/mailman/mail/mailman leave users",
                  :target    => target,
-                 :provider  => "augeas"
+                 :provider  => "augeas",
                ))
 
         aug_open(target, "Aliases.lns") do |aug|
@@ -113,7 +113,7 @@ describe provider_class do
                :name     => "mailer-daemon",
                :ensure   => "absent",
                :target   => target,
-               :provider => "augeas"
+               :provider => "augeas",
              ))
 
       aug_open(target, "Aliases.lns") do |aug|
@@ -127,7 +127,7 @@ describe provider_class do
                  :name      => "mailer-daemon",
                  :recipient => ["test"],
                  :target    => target,
-                 :provider  => "augeas"
+                 :provider  => "augeas",
                ))
 
         aug_open(target, "Aliases.lns") do |aug|
@@ -142,7 +142,7 @@ describe provider_class do
                  :name      => "mailer-daemon",
                  :recipient => ["test-a", "test-b"],
                  :target    => target,
-                 :provider  => "augeas"
+                 :provider  => "augeas",
                ))
 
         aug_open(target, "Aliases.lns") do |aug|
@@ -163,7 +163,7 @@ describe provider_class do
                    :name      => "users-leave",
                    :recipient => "| /var/lib/mailman/mail/mailman leave userss",
                    :target    => target,
-                   :provider  => "augeas"
+                   :provider  => "augeas",
                  ))
 
           aug_open(target, "Aliases.lns") do |aug|
