@@ -2,9 +2,7 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:host).provider(:augeas)
-
-describe provider_class do
+describe Puppet::Type.type(:host).provider(:augeas) do
   before :each do
     allow(FileTest).to receive(:exist?).and_return(false)
     allow(FileTest).to receive(:exist?).with('/etc/hosts').and_return(true)
@@ -82,8 +80,8 @@ describe provider_class do
     let(:target) { tmptarget.path }
 
     it "should list instances" do
-      allow(provider_class).to receive(:target).and_return(target)
-      inst = provider_class.instances.map { |p|
+      allow(described_class).to receive(:target).and_return(target)
+      inst = described_class.instances.map { |p|
         {
           :name => p.get(:name),
           :ensure => p.get(:ensure),
