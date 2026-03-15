@@ -2,14 +2,12 @@
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:mailalias).provider(:augeas)
-
 def fullquotes_supported?
   # This lens breaks on Augeas 0.10.0
   Puppet::Util::Package.versioncmp(Puppet::Type.type(:mailalias).provider(:augeas).aug_version, '0.10.0') > 0
 end
 
-describe provider_class do
+describe Puppet::Type.type(:mailalias).provider(:augeas) do
   before :each do
     allow(FileTest).to receive(:exist?).and_return(false)
     allow(FileTest).to receive(:exist?).with('/etc/aliases').and_return(true)
@@ -24,7 +22,7 @@ describe provider_class do
                :name      => "foo",
                :recipient => "bar",
                :target    => target,
-               :provider  => "augeas"
+               :provider  => "augeas",
              ))
 
       aug_open(target, "Aliases.lns") do |aug|
@@ -39,14 +37,14 @@ describe provider_class do
           :name      => "foo",
           :recipient => "bar",
           :target    => target,
-          :provider  => "augeas"
+          :provider  => "augeas",
         ),
         Puppet::Type.type(:mailalias).new(
           :name      => "bar",
           :recipient => "baz",
           :target    => target,
-          :provider  => "augeas"
-        )
+          :provider  => "augeas",
+        ),
       )
 
       aug_open(target, "Aliases.lns") do |aug|
@@ -59,7 +57,7 @@ describe provider_class do
                :name      => "foo",
                :recipient => ["foo-a", "foo-b"],
                :target    => target,
-               :provider  => "augeas"
+               :provider  => "augeas",
              ))
 
       aug_open(target, "Aliases.lns") do |aug|
@@ -77,7 +75,7 @@ describe provider_class do
                  :name      => "users-leave",
                  :recipient => "| /var/lib/mailman/mail/mailman leave users",
                  :target    => target,
-                 :provider  => "augeas"
+                 :provider  => "augeas",
                ))
 
         aug_open(target, "Aliases.lns") do |aug|
@@ -93,8 +91,8 @@ describe provider_class do
     let(:target) { tmptarget.path }
 
     it "should list instances" do
-      allow(provider_class).to receive(:target).and_return(target)
-      inst = provider_class.instances.map { |p|
+      allow(described_class).to receive(:target).and_return(target)
+      inst = described_class.instances.map { |p|
         {
           :name => p.get(:name),
           :ensure => p.get(:ensure),
@@ -113,7 +111,7 @@ describe provider_class do
                :name     => "mailer-daemon",
                :ensure   => "absent",
                :target   => target,
-               :provider => "augeas"
+               :provider => "augeas",
              ))
 
       aug_open(target, "Aliases.lns") do |aug|
@@ -127,7 +125,7 @@ describe provider_class do
                  :name      => "mailer-daemon",
                  :recipient => ["test"],
                  :target    => target,
-                 :provider  => "augeas"
+                 :provider  => "augeas",
                ))
 
         aug_open(target, "Aliases.lns") do |aug|
@@ -142,7 +140,7 @@ describe provider_class do
                  :name      => "mailer-daemon",
                  :recipient => ["test-a", "test-b"],
                  :target    => target,
-                 :provider  => "augeas"
+                 :provider  => "augeas",
                ))
 
         aug_open(target, "Aliases.lns") do |aug|
@@ -163,7 +161,7 @@ describe provider_class do
                    :name      => "users-leave",
                    :recipient => "| /var/lib/mailman/mail/mailman leave userss",
                    :target    => target,
-                   :provider  => "augeas"
+                   :provider  => "augeas",
                  ))
 
           aug_open(target, "Aliases.lns") do |aug|

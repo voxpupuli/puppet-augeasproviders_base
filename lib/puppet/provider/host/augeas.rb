@@ -29,7 +29,7 @@ Puppet::Type.type(:host).provide(:augeas, :parent => Puppet::Type.type(:augeaspr
   def self.get_resource(aug, hpath, target)
     host = {
       :ensure => :present,
-      :target => target
+      :target => target,
     }
     return nil unless host[:name] = aug.get("#{hpath}/canonical")
 
@@ -59,12 +59,12 @@ Puppet::Type.type(:host).provide(:augeas, :parent => Puppet::Type.type(:augeaspr
 
   def self.prefetch(resources)
     targets = []
-    resources.each do |name, resource|
+    resources.each_value do |resource|
       targets << target(resource) unless targets.include? target(resource)
     end
     hosts = targets.inject([]) { |hosts, target| hosts += get_resources({ :target => target }) }
     resources.each do |name, resource|
-      if provider = hosts.find { |host| (host.name == name and host.target == target(resource)) }
+      if provider = hosts.find { |host| host.name == name and host.target == target(resource) }
         resources[name].provider = provider
       end
     end
