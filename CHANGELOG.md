@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v5.0.0](https://github.com/voxpupuli/puppet-augeasproviders_base/tree/v5.0.0) (2026-03-16)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-augeasproviders_base/compare/v4.0.0...v5.0.0)
+
+**Breaking changes:**
+
+- Drop EOL Debian 10, Ubuntu 18/20, EL7 support [\#48](https://github.com/voxpupuli/puppet-augeasproviders_base/pull/48) ([bastelfreak](https://github.com/bastelfreak))
+- drop puppet support; require openvox 8.x [\#35](https://github.com/voxpupuli/puppet-augeasproviders_base/pull/35) ([pccibot](https://github.com/pccibot))
+
+**Implemented enhancements:**
+
+- puppet/augeasproviders\_core: Allow 5.x [\#49](https://github.com/voxpupuli/puppet-augeasproviders_base/pull/49) ([bastelfreak](https://github.com/bastelfreak))
+- Add support for Debian 12 [\#40](https://github.com/voxpupuli/puppet-augeasproviders_base/pull/40) ([smortex](https://github.com/smortex))
+
 ## [v4.0.0](https://github.com/voxpupuli/puppet-augeasproviders_base/tree/v4.0.0) (2023-06-22)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-augeasproviders_base/compare/v3.0.0...v4.0.0)
